@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart' hide Headers;
+import 'package:dio/dio.dart';
 import 'package:flutter_training_2/data/model/movie_list_response.dart';
 import 'package:flutter_training_2/utils/constants.dart';
 import 'package:retrofit/retrofit.dart';
@@ -6,10 +6,6 @@ import 'package:retrofit/retrofit.dart';
 part 'api_client.g.dart';
 
 @RestApi(baseUrl: BASE_URL)
-// @Headers(<String, dynamic>{
-//   'Content-Type': 'application/json',
-//   'Accept': 'application/json',
-// })
 abstract class ApiClient {
   factory ApiClient(Dio dio) {
     dio.options = BaseOptions(
@@ -18,7 +14,7 @@ abstract class ApiClient {
       sendTimeout: 10000,
       baseUrl: BASE_URL,
       queryParameters: {
-        'apikey': API_KEY,
+        'api_key': API_KEY,
       },
     );
     return _ApiClient(dio);

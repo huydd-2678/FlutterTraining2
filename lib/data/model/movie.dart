@@ -16,7 +16,7 @@ class Movie {
   @JsonKey(name: 'title')
   String? title;
   @JsonKey(name: 'vote_average')
-  String? voteAverage;
+  double? voteAverage;
   @JsonKey(name: 'genre_ids')
   List<int>? genreIds;
 

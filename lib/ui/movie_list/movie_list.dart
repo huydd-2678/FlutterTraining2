@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_training_2/data/repository/movie_repository.dart';
+import 'package:flutter_training_2/data/repository/movie_repository_impl.dart';
 import 'package:flutter_training_2/ui/movie_detail/movie_detail.dart';
+import 'package:flutter_training_2/ui/movie_list/movie_list_view_model.dart';
+import 'package:provider/provider.dart';
 
 class MovieList extends StatefulWidget {
   const MovieList({Key? key}) : super(key: key);
@@ -9,6 +13,11 @@ class MovieList extends StatefulWidget {
 }
 
 class _MovieListState extends State<MovieList> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,31 +36,20 @@ class _MovieListState extends State<MovieList> {
       ),
       body: TextButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const MovieDetail()),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => const MovieDetail()),
+          // );
         },
-        child: const Text(
-          'FORGOT PASSWORD?',
-          style: TextStyle(
+        child: Text(
+          '${context.watch<MovieListViewModel>().movieListResponse.results?.first.title}',
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 14,
             decoration: TextDecoration.underline,
             decorationThickness: 1.5,
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _item() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: [
-          
-        ],
       ),
     );
   }
