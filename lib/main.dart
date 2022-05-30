@@ -1,26 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_training_2/data/api_client.dart';
-import 'package:flutter_training_2/data/repository/movie_repository_impl.dart';
+import 'package:flutter_training_2/di/app_provider.dart';
 import 'package:flutter_training_2/ui/movie_list/movie_list.dart';
-import 'package:flutter_training_2/ui/movie_list/movie_list_view_model.dart';
-import 'package:logger/logger.dart';
-import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
 
-final logger = Logger();
-
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => MovieListViewModel(MovieRepositoryImpl()))
-    ],
+    providers: appProviders,
     child: const MyApp(),
   ));
-
-  // final dio = Dio();
-  // final client = ApiClient(dio);
-
-  // client.getMovieList().then((it) => logger.d(it.results?.first.toJson()));
 }
 
 class MyApp extends StatelessWidget {

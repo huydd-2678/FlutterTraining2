@@ -1,36 +1,54 @@
-import 'package:json_annotation/json_annotation.dart';
-part 'movie.g.dart';
+import 'package:flutter_training_2/data/model/genre.dart';
 
-@JsonSerializable()
 class Movie {
-  @JsonKey(name: 'id')
-  int? id;
-  @JsonKey(name: 'poster_path')
+  int id;
   String? posterPath;
-  @JsonKey(name: 'backdrop_path')
   String? backdropPath;
-  @JsonKey(name: 'overview')
-  String? overview;
-  @JsonKey(name: 'release_date')
-  String? releaseDate;
-  @JsonKey(name: 'title')
-  String? title;
-  @JsonKey(name: 'vote_average')
-  double? voteAverage;
-  @JsonKey(name: 'genre_ids')
-  List<int>? genreIds;
+  String overview;
+  String releaseDate;
+  String title;
+  num voteAverage;
 
-  Movie(
-      {this.id,
-      this.posterPath,
-      this.backdropPath,
-      this.overview,
-      this.releaseDate,
-      this.title,
-      this.voteAverage,
-      this.genreIds});
+  // List<Genre> genres;
 
-  factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
+  Movie({
+    required this.id,
+    required this.posterPath,
+    required this.backdropPath,
+    required this.overview,
+    required this.releaseDate,
+    required this.title,
+    required this.voteAverage,
+    // required this.genres
+  });
 
-  Map<String, dynamic> toJson() => _$MovieToJson(this);
+  factory Movie.fromJson(Map<String, dynamic> json) {
+    return Movie(
+      id: json['id'] ?? '',
+      title: json['title'] ?? '',
+      overview: json['overview'] ?? '',
+      posterPath: json['poster_path'],
+      backdropPath: json['backdrop_path'],
+      voteAverage: json['vote_average'] ?? 0.0,
+      releaseDate: json['release_date'] ?? '',
+      // genres: List<Genre>.from(json["genres"].map((x) => Genre.fromJson(x))),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'poster_path': posterPath,
+      'overview': overview,
+      'backdrop_path': backdropPath,
+      'vote_average': voteAverage,
+      'release_date': releaseDate,
+      // 'genre_ids': List<dynamic>.from(genres.map((x) => x.toJson())),
+    };
+  }
+
+  String get fullImageUrl => 'https://image.tmdb.org/t/p/w200$posterPath';
+
+  String get fullBGImageUrl => 'https://image.tmdb.org/t/p/w400$backdropPath';
 }

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_training_2/data/model/movie.dart';
+import 'package:flutter_training_2/ui/movie_detail/triangle_painter.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class MovieDetail extends StatefulWidget {
-  const MovieDetail({Key? key}) : super(key: key);
+  final Movie movie;
+
+  const MovieDetail({Key? key, required this.movie}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _MovieDetailState();
@@ -11,19 +15,17 @@ class MovieDetail extends StatefulWidget {
 class _MovieDetailState extends State<MovieDetail> {
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
         title: const Text(
           'Movie Detail',
           style: TextStyle(
-            color: Color(0xFF0A0A0A),
-            fontSize: 18,
             fontWeight: FontWeight.bold,
+            fontSize: 24,
+            color: Color(0xFF0A0A0A),
           ),
         ),
         leading: GestureDetector(
@@ -44,43 +46,73 @@ class _MovieDetailState extends State<MovieDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _image(screenWidth),
+            _image(widget.movie.fullBGImageUrl, widget.movie.fullImageUrl),
             const SizedBox(
               height: 6,
             ),
-            _title(),
+            _title(widget.movie.title, widget.movie.voteAverage),
             const SizedBox(
               height: 10,
             ),
             _reviewsAndTrailers(),
-            _info(),
-            _description(),
+            _info(widget.movie.releaseDate),
+            _description(widget.movie.overview),
           ],
         ),
       ),
     );
   }
 
-  Widget _image(double width) {
+  Widget _image(String backdropUrl, String posterUrl) {
     return Stack(
       children: [
-        Image.asset(
-          'assets/images/rsq8.jpg',
-          width: width,
+        Image.network(
+          backdropUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: 300,
         ),
         Positioned(
-          bottom: 10,
-          left: 15,
-          child: Image.asset(
-            'assets/images/rsq8.jpg',
-            width: width * 0.25,
+          bottom: 0,
+          left: 0,
+          child: CustomPaint(
+            painter: TrianglePainter(
+              strokeColor: Colors.white,
+              strokeWidth: 10,
+              paintingStyle: PaintingStyle.fill,
+            ),
+            child: SizedBox(
+              height: 100,
+              width: MediaQuery.of(context).size.width,
+            ),
           ),
-        )
+        ),
+        Positioned(
+            bottom: 10,
+            left: 15,
+            child: Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12.withOpacity(0.5),
+                    spreadRadius: 8,
+                    blurRadius: 8,
+                    offset: const Offset(0, 0), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: Image.network(
+                posterUrl,
+                fit: BoxFit.cover,
+                width: 120,
+                height: 180,
+              ),
+            ))
       ],
     );
   }
 
-  Widget _title() {
+  Widget _title(String title, num vote) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -88,19 +120,23 @@ class _MovieDetailState extends State<MovieDetail> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            "Escape From Pretoria",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           CircularPercentIndicator(
             radius: 18,
             percent: 0.6,
-            center: const Text(
-              "6.5",
-              style: TextStyle(
+            center: Text(
+              vote.toString(),
+              style: const TextStyle(
                 fontSize: 13,
                 color: Color(0xFFA1A1A1),
               ),
@@ -180,7 +216,7 @@ class _MovieDetailState extends State<MovieDetail> {
     );
   }
 
-  Widget _info() {
+  Widget _info(String releaseDate) {
     return Container(
       height: 80,
       decoration: const BoxDecoration(
@@ -219,20 +255,20 @@ class _MovieDetailState extends State<MovieDetail> {
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   'Release',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 4,
                 ),
                 Text(
-                  '2020-03-06',
-                  style: TextStyle(
+                  releaseDate,
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                 )
@@ -244,17 +280,17 @@ class _MovieDetailState extends State<MovieDetail> {
     );
   }
 
-  Widget _description() {
+  Widget _description(String overview) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
         vertical: 20,
       ),
-      child: const Text(
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when anunknown printer took a galley of type and scrambled itto make a type specimen book. It has survived not only five centuries,but also the leap into electronic typesetting, remaining essentiallyunchanged. It was popularised in the 1960s with the release of Letrasetsheets containing Lorem Ipsum passages, and more',
+      child: Text(
+        overview,
         maxLines: 5,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 16,
         ),
       ),
