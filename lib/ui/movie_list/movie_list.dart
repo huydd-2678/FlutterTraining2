@@ -17,9 +17,7 @@ class _MovieListState extends State<MovieList> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      Provider.of<MovieListViewModel>(context, listen: false).getMovieList();
-    });
+    Provider.of<MovieListViewModel>(context, listen: false).getMovieList();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -56,7 +54,7 @@ class _MovieListState extends State<MovieList> {
   Widget _movieList(MovieListViewModel movieListViewModel) {
     return RefreshIndicator(
       onRefresh: () async {
-        return movieListViewModel.getMovieList(page: 1, isRefresh: true);
+        return movieListViewModel.getMovieList(isRefresh: true);
       },
       child: ListView.builder(
         controller: _scrollController,
