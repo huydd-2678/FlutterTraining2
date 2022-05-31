@@ -133,7 +133,7 @@ class _MovieDetailState extends State<MovieDetail> {
           ),
           CircularPercentIndicator(
             radius: 18,
-            percent: 0.6,
+            percent: vote.toDouble(),
             center: Text(
               vote.toString(),
               style: const TextStyle(
